@@ -47,7 +47,11 @@ const TodoItem = ({ id, content, onEditHandler, onDeleteHandler }) => {
 
 			{/* Action Buttons */}
 			<div className={classes['action-buttons']}>
-				<Button onClick={showEditFormHandler} type="button" label="Edit" />
+				<Button
+					onClick={showEditFormHandler}
+					type="button"
+					label={showEditForm ? 'Cancel' : 'Edit'}
+				/>
 				<Button onClick={onDeleteTodoHandler} type="button" label="Delete" />
 			</div>
 		</div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // Components
 import Form from './components/form/form.component';
@@ -14,8 +15,12 @@ const App = () => {
 		setTodos(prevState => [...prevState, todo]);
 	};
 
-	const fetchTodos = () => {
+	const fetchTodos = async () => {
 		// TODO: Fetch data from API
+		const res = await axios.get('http://localhost:4000/api/v1/todos');
+
+		const resTodos = res.data.data.todos;
+		setTodos(resTodos);
 	};
 
 	const editTodo = (id, newContent) => {
