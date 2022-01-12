@@ -10,44 +10,62 @@ import './App.css';
 const App = () => {
 	// State
 	const [todos, setTodos] = useState([]);
-
-	const addTodo = todo => {
-		setTodos(prevState => [...prevState, todo]);
-	};
-
+	const urlData = 'http://localhost:4000/api/v1/todos';
 	const fetchTodos = async () => {
 		// TODO: Fetch data from API
-		const res = await axios.get('http://localhost:4000/api/v1/todos');
-
+		const res = await axios.get(urlData);
 		const resTodos = res.data.data.todos;
 		setTodos(resTodos);
 	};
 
-	const editTodo = (id, newContent) => {
-		// TODO: Send data to API
-		setTodos(prevState => {
-			const currentTodos = prevState;
 
-			const todoIndex = currentTodos.findIndex(todo => +todo.id === +id);
+	const addTodo = async (todo) => {
+		// setTodos(prevState => [...prevState, todo]);
+		await axios.post(urlData, {
+			content: todo.content
+		})
+		.then(resp => console.log(resp))
+		.catch(err => console.log(err))
 
-			const updatedTodo = currentTodos[todoIndex];
-
-			updatedTodo.content = newContent;
-
-			currentTodos[todoIndex] = updatedTodo;
-
-			return currentTodos;
-		});
+		fetchTodos();
 	};
 
-	const deleteTodo = id => {
-		setTodos(prevState => {
-			const currentTodos = prevState;
 
-			const updatedTodos = currentTodos.filter(todo => +todo.id !== +id);
 
-			return [...updatedTodos];
-		});
+	const editTodo = async (id, newContent) => {
+		// TODO: Send data to API
+		// setTodos(prevState => {
+		// 	const currentTodos = prevState;
+
+		// 	const todoIndex = currentTodos.findIndex(todo => +todo.id === +id);
+
+		// 	const updatedTodo = currentTodos[todoIndex];
+
+		// 	updatedTodo.content = newContent;
+
+		// 	currentTodos[todoIndex] = updatedTodo;
+
+		// 	return currentTodos;
+		// });
+		await axios.patch(`${urlData}/${id}`,{
+			content: newContent
+		})
+		.then(resp => console.log(resp))
+		.catch(err => console.log(err))
+
+		fetchTodos();
+	};
+
+	const deleteTodo = async (id) => {
+		// setTodos(prevState => {
+		// 	const currentTodos = prevState;
+
+		// 	const updatedTodos = currentTodos.filter(todo => +todo.id !== +id);
+
+		// 	return [...updatedTodos];
+		// });
+		await axios.delete(`${urlData}/${id}`)
+		fetchTodos();
 	};
 
 	// When component is mounted, fetch todos
